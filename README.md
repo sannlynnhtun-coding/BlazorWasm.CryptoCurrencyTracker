@@ -1,6 +1,6 @@
 # CryptoCurrencyTracker
 
-###Deploy to Github
+### Deploy to Github
 ```
 <BlazorEnableCompression>false</BlazorEnableCompression>
 <BlazorCacheBootResources>false</BlazorCacheBootResources>
