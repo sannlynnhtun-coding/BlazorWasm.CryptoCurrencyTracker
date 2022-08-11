@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+		<BlazorEnableCompression>false</BlazorEnableCompression>
 		<BlazorCacheBootResources>false</BlazorCacheBootResources>
 	</PropertyGroup>
 
