@@ -1,0 +1,36 @@
+﻿@inject HttpClient Http
+
+@if (Data != null)
+{
+    <MudGrid>
+        <MudItem xs="4">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderAvatar>
+                        <RadzenImage Path="@Data?.image?.large" Class="rounded-circle float-left mr-3" Style="width: 100px; height: 100px;" />
+                    </CardHeaderAvatar>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.body1">@Data?.name</MudText>
+                        <MudText Typo="Typo.body2">Rank : @Data?.market_cap_rank</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Style="white-space: pre-line;" Typo="Typo.subtitle2">@((MarkupString)Data?.description?.en)</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="8">
+                @*<P_HistoricalChart CoinId="@CoinId" />*@
+            </MudItem>
+        </MudGrid>
+}
+
+@code {
+    [Parameter] public string CoinId { get; set; }
+    SingleCoinModel Data;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Data = await Http.GetFromJsonAsync<SingleCoinModel>(ApiUrl.SingleCoin(CoinId));
+    }
+}

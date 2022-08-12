@@ -1,12 +1,12 @@
 ﻿@inherits LayoutComponentBase
 
-<MudAppBar Elevation="1" Fixed="false" Color="Color.Dark" Style="background-color: #282828;">
+<MudAppBar Elevation="1" Fixed="true" Color="Color.Dark" Style="background-color: #282828;">
     <MudText Typo="Typo.h6" Style="margin-right: 10px;color: white;">Crypto Currency Tracker</MudText>
     <MudSpacer />
     <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/sannlynnhtun-coding" Target="_blank" />
 </MudAppBar>
 <MudLayout>
-    <MudMainContent Style="padding-top: 0px;">
+    <MudMainContent>
         @Body
     </MudMainContent>
 </MudLayout>

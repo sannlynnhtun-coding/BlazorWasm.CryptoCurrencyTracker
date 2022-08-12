@@ -1,0 +1,35 @@
+﻿@if (Data != null)
+{
+    <RadzenDataGrid AllowFiltering="true" AllowPaging="true" PageSize="20" AllowSorting="true" RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single"
+                Data="@Data" TItem="CoinListModel">
+        <Template Context="item">
+            <P_SingleCoin CoinId="@item.id"/>
+        </Template>
+        <Columns>
+            <RadzenDataGridColumn TItem="CoinListModel" Property="name" Title="Coin" Width="200px" TextAlign="TextAlign.Left">
+                <Template Context="item">
+                    <span style="align-items: center;display: flex;">
+                        <RadzenImage Path="@item?.image" style="width: 32px; height: 32px; border-radius: 16px; margin-right: 6px;" />
+                        @item?.name
+                    </span>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="CoinListModel" Property="current_price" FormatString="{0:n}" TextAlign="TextAlign.Right" Title="Price" />
+            <RadzenDataGridColumn TItem="CoinListModel" Property="price_change_percentage_24h" TextAlign="TextAlign.Right" Title="24h Change" />
+            <RadzenDataGridColumn TItem="CoinListModel" Property="market_cap" FormatString="{0:n}" TextAlign="TextAlign.Right" Title="Market Cap" />
+        </Columns>
+    </RadzenDataGrid>
+}
+@code {
+    [Parameter] public IEnumerable<CoinListModel> Data { get; set; }
+    RadzenDataGrid<CoinListModel> grid;
+
+    protected override async Task OnParametersSetAsync()
+    {
+    }
+
+    void RowRender(RowRenderEventArgs<CoinListModel> args)
+    {
+        //args.Expandable = args.Data.ShipCountry == "France" || args.Data.ShipCountry == "Brazil";
+    }
+}

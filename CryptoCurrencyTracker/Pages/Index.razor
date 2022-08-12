@@ -1,61 +1,32 @@
 ﻿@page "/"
 @inject HttpClient Http
 
-<div class="container">
-    <div class="row py-5">
-        <div class="col">
-            <RadzenDataList WrapItems="true" AllowPaging="false" Data="@data" TItem="TrendingCoinsModel">
-                <Template Context="item">
-                    <RadzenCard Style="width:300px;">
-                        <div class="d-flex flex-row align-items-center">
-                            <RadzenImage Path="@item.image" Class="rounded-circle float-left mr-3" Style="width: 80px; height: 80px;" />
-                            <div>
-                                <h4 class="mb-0"></h4>
-                                <div>@item.name</div>
-                                <div style="font-size: .8em"></div>
-                            </div>
-                        </div>
-                        <hr style="border: none; background-color: rgba(0,0,0,.08); height: 1px; margin: 1rem 0;" />
-                        <div class="row">
-                            <div class="col-md-6 text-truncate">
-                                <b></b>
-                            </div>
-                            <div class="col-md-6 text-right">
-                                <RadzenButton ButtonStyle="ButtonStyle.Light" Class="mr-1">
-                                    @item.symbol
-                                    <RadzenBadge Class="ml-3" BadgeStyle="@(item.market_cap_change_percentage_24h > 0 ? BadgeStyle.Success : BadgeStyle.Danger)"
-                                                 Text="@(item.market_cap_change_percentage_24h.ToString("f2") + "%")" />
-                                </RadzenButton>
-                            </div>
-                        </div>
-                    </RadzenCard>
-                </Template>
-            </RadzenDataList>
-            <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" HorizontalAlign="HorizontalAlign.Right" Count="count" PageSize="@pageSize" PageNumbersCount="5" PageChanged="@PageChanged" />
-        </div>
-    </div>
-</div>
+@*<P_SlideCoins />*@
+<MudContainer MaxWidth="MaxWidth.ExtraLarge">
+    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" Centered="false" Class="my-6" Color="Color.Dark">
+        <MudTabPanel Icon="@Icons.Material.Filled.TableRows" Text="Table" BadgeDot="true" BadgeColor="Color.Success">
+            @if (CoinList != null)
+            {
+                <P_CoinList Data="CoinList" />
+            }
+        </MudTabPanel>
+        <MudTabPanel Icon="@Icons.Material.Filled.Api" Text="List" BadgeDot="true" BadgeColor="Color.Error">
+            @if (TrendingCoins != null)
+            {
+                <P_TrendingCoins Data="TrendingCoins" />
+            }
+        </MudTabPanel>
+    </MudTabs>
+</MudContainer>
+
+
 @code {
-    string pagingSummaryFormat = "Displaying page {0} of {1} (total {2} records)";
-    int pageSize = 12;
-    int count;
-    IEnumerable<TrendingCoinsModel> apiData;
-    IEnumerable<TrendingCoinsModel> data;
+    IEnumerable<TrendingCoinsModel> TrendingCoins;
+    IEnumerable<CoinListModel> CoinList;
 
     protected override async Task OnInitializedAsync()
     {
-        apiData = await Http.GetFromJsonAsync<TrendingCoinsModel[]>(ApiUrl.TrendingCoinsV2("USD"));
-        count = apiData.Count();
-        GetData(0, pageSize);
-    }
-
-    void PageChanged(PagerEventArgs args)
-    {
-        GetData(args.Skip, args.Top);
-    }
-
-    void GetData(int skip, int take)
-    {
-        data = apiData.Skip(skip).Take(take);
+        TrendingCoins = await Http.GetFromJsonAsync<TrendingCoinsModel[]>(ApiUrl.TrendingCoinsV2("USD"));
+        CoinList = await Http.GetFromJsonAsync<CoinListModel[]>(ApiUrl.CoinList("USD"));
     }
 }

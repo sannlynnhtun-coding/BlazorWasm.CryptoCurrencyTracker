@@ -1,0 +1,69 @@
+﻿@inject HttpClient Http
+
+<h1>Radzen Blazor Chart with line series</h1>
+@if (Data != null && revenue2019 != null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 my-5">
+                <RadzenCard Class="w-100 mb-4">
+                    <RadzenCheckBox @bind-Value="@smooth" Name="smooth"></RadzenCheckBox>
+                    <RadzenLabel Text="Smooth" For="smooth" Style="margin-left: 8px; vertical-align: middle;" />
+                    <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
+                    <RadzenLabel Text="Show Data Labels" For="dataLabels" Style="margin-left: 8px; vertical-align: middle;" />
+                </RadzenCard>
+                <RadzenChart>
+                    <RadzenLineSeries Smooth="@smooth" Data="@revenue2019" CategoryProperty="Date" Title="2019" LineType="LineType.Dashed" ValueProperty="Revenue">
+                        <RadzenMarkers MarkerType="MarkerType.Square" />
+                        <RadzenSeriesDataLabels Visible="@showDataLabels" />
+                    </RadzenLineSeries>
+                    <RadzenCategoryAxis Padding="20" Formatter="@FormatAsMonth" />
+                    <RadzenValueAxis Formatter="@FormatAsUSD">
+                        <RadzenGridLines Visible="true" />
+                        <RadzenAxisTitle Text="Revenue in USD" />
+                    </RadzenValueAxis>
+                </RadzenChart>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string CoinId { get; set; }
+    public HistoricalChartModel Data { get; set; }
+    DataItem[] revenue2019;
+
+    bool smooth = true;
+    bool showDataLabels = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Data = await Http.GetFromJsonAsync<HistoricalChartModel>(ApiUrl.HistoricalChart(CoinId));
+        revenue2019 = Data?.prices?.Select(x => new DataItem
+            {
+                Date = DateTime.FromOADate(TimeSpan.FromMinutes(x.ToList()[0]).Ticks).ToString("hh:mm tt"),
+                Revenue = x.ToList()[1]
+            })?.ToArray();
+    }
+
+    string FormatAsUSD(object value)
+    {
+        return ((double)value).ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
+    }
+
+    string FormatAsMonth(object value)
+    {
+        if (value != null)
+        {
+            return Convert.ToDateTime(value).ToString("MMM");
+        }
+
+        return string.Empty;
+    }
+
+    class DataItem
+    {
+        public string Date { get; set; }
+        public double Revenue { get; set; }
+    }
+}
