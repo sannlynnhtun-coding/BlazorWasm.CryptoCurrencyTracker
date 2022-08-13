@@ -1,4 +1,4 @@
-﻿@inject HttpClient Http
+﻿@inject IApiService _apiService
 
 @if (Data != null && Data.is_success)
 {
@@ -31,7 +31,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        var data1 = await Http.GetFromJsonAsync<SingleCoinModel>(ApiUrl.SingleCoin(CoinId));
+        var data1 = await _apiService.GetSingleCoinAsync(CoinId);
         if (data1 != null)
         {
             Data = data1;

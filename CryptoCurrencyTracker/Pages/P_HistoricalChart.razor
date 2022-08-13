@@ -1,5 +1,5 @@
 ﻿@using ChartJs.Blazor.LineChart
-@inject HttpClient Http
+@inject IApiService _apiService
 
 <Chart Config="_config" @ref="_chart"></Chart>
 
@@ -71,7 +71,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        var data1 = await Http.GetFromJsonAsync<HistoricalChartModel>(ApiUrl.HistoricalChart(CoinId, 1));
+        var data1 = await _apiService.GetHistoricalChartAsync(CoinId, 1);
         if (data1 != null)
         {
             Data = data1;

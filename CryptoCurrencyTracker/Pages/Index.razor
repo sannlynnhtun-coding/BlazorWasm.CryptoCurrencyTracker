@@ -1,5 +1,5 @@
 ﻿@page "/"
-@inject HttpClient Http
+@inject IApiService _apiService
 
 @*<P_SlideCoins />*@
 <MudContainer MaxWidth="MaxWidth.ExtraLarge">
@@ -19,7 +19,6 @@
     </MudTabs>
 </MudContainer>
 
-
 @code {
     IEnumerable<TrendingCoinsModel> TrendingCoins = new List<TrendingCoinsModel>();
     IEnumerable<CoinListModel> CoinList = new List<CoinListModel>();
@@ -28,13 +27,13 @@
     {
         try
         {
-            var data1 = await Http.GetFromJsonAsync<TrendingCoinsModel[]>(ApiUrl.TrendingCoinsV2("USD"));
+            var data1 = await _apiService.GetTrendingCoinsV2Async("USD");
             if (data1 != null)
             {
                 Console.WriteLine(data1.ToJson());
                 TrendingCoins = data1;
             }
-            var data2 = await Http.GetFromJsonAsync<CoinListModel[]>(ApiUrl.CoinList("USD"));
+            var data2 = await _apiService.GetCoinListAsync("USD");
             if (data2 != null)
             {
                 Console.WriteLine(data2.ToJson());

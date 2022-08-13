@@ -1,4 +1,5 @@
 using CryptoCurrencyTracker;
+using CryptoCurrencyTracker.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
@@ -11,6 +12,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddMudServices();
 
 builder.Services.AddScoped(sp => new HttpClient());
+builder.Services.AddScoped<IApiService, ApiService>();
 //builder.Services.AddHttpClient("WebAPI", client =>
 //    client.BaseAddress = new Uri("https://api.coingecko.com"));
 
