@@ -1,4 +1,4 @@
-﻿@if (Data != null)
+﻿@if (data != null && data.Count() > 0)
 {
     <RadzenDataList WrapItems="true" AllowPaging="false" Data="@data" TItem="TrendingCoinsModel">
         <Template Context="item">
@@ -35,8 +35,8 @@
     int pageSize = 18;
     int count;
     [Parameter]
-    public IEnumerable<TrendingCoinsModel> Data { get; set; }
-    IEnumerable<TrendingCoinsModel> data;
+    public IEnumerable<TrendingCoinsModel> Data { get; set; } = new List<TrendingCoinsModel>().ToArray();
+    IEnumerable<TrendingCoinsModel> data = new List<TrendingCoinsModel>().ToArray();
 
     protected override async Task OnParametersSetAsync()
     {

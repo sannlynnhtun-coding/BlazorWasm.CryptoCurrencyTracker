@@ -29,21 +29,25 @@
 }
 
 @code {
-    [Parameter] public string CoinId { get; set; }
-    public HistoricalChartModel Data { get; set; }
-    DataItem[] revenue2019;
+    [Parameter] public string CoinId { get; set; } = "";
+    public HistoricalChartModel Data { get; set; } = new HistoricalChartModel();
+    DataItem[] revenue2019 = new List<DataItem>().ToArray();
 
     bool smooth = true;
     bool showDataLabels = true;
 
     protected override async Task OnParametersSetAsync()
     {
-        Data = await Http.GetFromJsonAsync<HistoricalChartModel>(ApiUrl.HistoricalChart(CoinId));
-        revenue2019 = Data?.prices?.Select(x => new DataItem
+        var data1 = await Http.GetFromJsonAsync<HistoricalChartModel>(ApiUrl.HistoricalChart(CoinId));
+        if(data1 != null){
+            Data = data1;
+            var res = Data.prices.Select(x => new DataItem
             {
                 Date = DateTime.FromOADate(TimeSpan.FromMinutes(x.ToList()[0]).Ticks).ToString("hh:mm tt"),
                 Revenue = x.ToList()[1]
-            })?.ToArray();
+            });
+            revenue2019 = res.ToArray();
+        }
     }
 
     string FormatAsUSD(object value)

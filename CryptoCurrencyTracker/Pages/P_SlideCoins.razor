@@ -1,6 +1,6 @@
 ﻿
 <MudContainer MaxWidth="MaxWidth.Large">
-    <MudCarousel Class="flex-1" @ref="_carousel" ItemsSource="@_source" @bind-SelectedIndex="selectedIndex" 
+    <MudCarousel Class="flex-1" ItemsSource="@_source" @bind-SelectedIndex="selectedIndex" 
     Style="height:300px;" 
     ShowArrows="@_arrows" 
     BulletsColor="Color.Warning" 
@@ -14,7 +14,7 @@
 </MudContainer>
 
 @code {
-    private MudCarousel<string> _carousel;
+    //private MudCarousel<string> _carousel;
     private bool _arrows = true;
     private bool _bullets = true;
     private bool _autocycle = true;
