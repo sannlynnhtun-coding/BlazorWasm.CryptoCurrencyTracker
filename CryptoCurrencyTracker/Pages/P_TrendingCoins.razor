@@ -1,6 +1,9 @@
 ﻿@if (data != null && data.Count() > 0)
 {
-    <RadzenDataList WrapItems="true" AllowPaging="false" Data="@data" TItem="TrendingCoinsModel">
+    <RadzenDataList WrapItems="true" 
+        AllowPaging="false" 
+        Data="@data" 
+        TItem="TrendingCoinsModel">
         <Template Context="item">
             <RadzenCard Style="width:200px;">
                 <div class="d-flex flex-row align-items-center">
@@ -38,7 +41,7 @@
     public IEnumerable<TrendingCoinsModel> Data { get; set; } = new List<TrendingCoinsModel>().ToArray();
     IEnumerable<TrendingCoinsModel> data = new List<TrendingCoinsModel>().ToArray();
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
         count = Data.Count();
         GetData(0, pageSize);

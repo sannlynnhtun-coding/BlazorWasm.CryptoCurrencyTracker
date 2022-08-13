@@ -26,17 +26,24 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var data1 = await Http.GetFromJsonAsync<TrendingCoinsModel[]>(ApiUrl.TrendingCoinsV2("USD"));
-        if (data1 != null)
+        try
         {
-            Console.WriteLine(data1.ToJson());
-            TrendingCoins = data1;
+            var data1 = await Http.GetFromJsonAsync<TrendingCoinsModel[]>(ApiUrl.TrendingCoinsV2("USD"));
+            if (data1 != null)
+            {
+                Console.WriteLine(data1.ToJson());
+                TrendingCoins = data1;
+            }
+            var data2 = await Http.GetFromJsonAsync<CoinListModel[]>(ApiUrl.CoinList("USD"));
+            if (data2 != null)
+            {
+                Console.WriteLine(data2.ToJson());
+                CoinList = data2;
+            }
         }
-        var data2 = await Http.GetFromJsonAsync<CoinListModel[]>(ApiUrl.CoinList("USD"));
-        if (data2 != null)
+        catch (Exception ex)
         {
-            Console.WriteLine(data2.ToJson());
-            CoinList = data2;
+            Console.WriteLine(ex.Message + ex.StackTrace);
         }
     }
 }
