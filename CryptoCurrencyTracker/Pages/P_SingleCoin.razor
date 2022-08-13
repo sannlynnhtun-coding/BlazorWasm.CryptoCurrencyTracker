@@ -1,6 +1,6 @@
 ﻿@inject HttpClient Http
 
-@if (Data != null)
+@if (Data != null && Data.is_success)
 {
     <MudGrid>
         <MudItem xs="4">
@@ -20,17 +20,22 @@
                 </MudCard>
             </MudItem>
             <MudItem xs="8">
-                @*<P_HistoricalChart CoinId="@CoinId" />*@
+                <P_HistoricalChart CoinId="@Data.id" Name="@Data.name" />
             </MudItem>
         </MudGrid>
 }
 
 @code {
-    [Parameter] public string CoinId { get; set; }
-    SingleCoinModel Data;
+    [Parameter] public string CoinId { get; set; } = "";
+    SingleCoinModel Data = new SingleCoinModel();
 
     protected override async Task OnParametersSetAsync()
     {
-        Data = await Http.GetFromJsonAsync<SingleCoinModel>(ApiUrl.SingleCoin(CoinId));
+        var data1 = await Http.GetFromJsonAsync<SingleCoinModel>(ApiUrl.SingleCoin(CoinId));
+        if (data1 != null)
+        {
+            Data = data1;
+            Data.is_success = true;
+        }
     }
 }

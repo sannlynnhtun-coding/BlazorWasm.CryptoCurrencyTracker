@@ -1,73 +1,98 @@
-﻿@inject HttpClient Http
+﻿@using ChartJs.Blazor.LineChart
+@inject HttpClient Http
 
-<h1>Radzen Blazor Chart with line series</h1>
-@if (Data != null && revenue2019 != null)
-{
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 my-5">
-                <RadzenCard Class="w-100 mb-4">
-                    <RadzenCheckBox @bind-Value="@smooth" Name="smooth"></RadzenCheckBox>
-                    <RadzenLabel Text="Smooth" For="smooth" Style="margin-left: 8px; vertical-align: middle;" />
-                    <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
-                    <RadzenLabel Text="Show Data Labels" For="dataLabels" Style="margin-left: 8px; vertical-align: middle;" />
-                </RadzenCard>
-                <RadzenChart>
-                    <RadzenLineSeries Smooth="@smooth" Data="@revenue2019" CategoryProperty="Date" Title="2019" LineType="LineType.Dashed" ValueProperty="Revenue">
-                        <RadzenMarkers MarkerType="MarkerType.Square" />
-                        <RadzenSeriesDataLabels Visible="@showDataLabels" />
-                    </RadzenLineSeries>
-                    <RadzenCategoryAxis Padding="20" Formatter="@FormatAsMonth" />
-                    <RadzenValueAxis Formatter="@FormatAsUSD">
-                        <RadzenGridLines Visible="true" />
-                        <RadzenAxisTitle Text="Revenue in USD" />
-                    </RadzenValueAxis>
-                </RadzenChart>
-            </div>
-        </div>
-    </div>
-}
+<Chart Config="_config" @ref="_chart"></Chart>
 
 @code {
+    [Parameter]
+    public string Name { get; set; } = "";
     [Parameter] public string CoinId { get; set; } = "";
     public HistoricalChartModel Data { get; set; } = new HistoricalChartModel();
-    DataItem[] revenue2019 = new List<DataItem>().ToArray();
 
-    bool smooth = true;
-    bool showDataLabels = true;
+    private const int InitalCount = 7;
+    private LineConfig _config;
+    private Chart _chart;
+    private string[] randomColor = new[]
+    {
+        ColorUtil.ColorHexString(255, 99, 132), // Slice 1 aka "Red"
+        ColorUtil.ColorHexString(255, 205, 86), // Slice 2 aka "Yellow"
+        ColorUtil.ColorHexString(75, 192, 192), // Slice 3 aka "Green"
+        ColorUtil.ColorHexString(54, 162, 235), // Slice 4 aka "Blue"
+    };
+
+    protected override void OnInitialized()
+    {
+        _config = new LineConfig
+            {
+                Options = new LineOptions
+                {
+                    Responsive = true,
+                    Title = new OptionsTitle
+                    {
+                        Display = false,
+                        Text = Name
+                    },
+                    Tooltips = new Tooltips
+                    {
+                        Mode = InteractionMode.Nearest,
+                        Intersect = true
+                    },
+                    Hover = new Hover
+                    {
+                        Mode = InteractionMode.Nearest,
+                        Intersect = true
+                    },
+                    Scales = new Scales
+                    {
+                        XAxes = new List<CartesianAxis>
+                {
+                    new CategoryAxis
+                    {
+                        ScaleLabel = new ScaleLabel
+                        {
+                            LabelString = "Month"
+                        }
+                    }
+                },
+                        YAxes = new List<CartesianAxis>
+                {
+                    new LinearCartesianAxis
+                    {
+                        ScaleLabel = new ScaleLabel
+                        {
+                            LabelString = "Value"
+                        }
+                    }
+                }
+                    }
+                }
+            };
+    }
 
     protected override async Task OnParametersSetAsync()
     {
-        var data1 = await Http.GetFromJsonAsync<HistoricalChartModel>(ApiUrl.HistoricalChart(CoinId));
-        if(data1 != null){
-            Data = data1;
-            var res = Data.prices.Select(x => new DataItem
-            {
-                Date = DateTime.FromOADate(TimeSpan.FromMinutes(x.ToList()[0]).Ticks).ToString("hh:mm tt"),
-                Revenue = x.ToList()[1]
-            });
-            revenue2019 = res.ToArray();
-        }
-    }
-
-    string FormatAsUSD(object value)
-    {
-        return ((double)value).ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
-    }
-
-    string FormatAsMonth(object value)
-    {
-        if (value != null)
+        var data1 = await Http.GetFromJsonAsync<HistoricalChartModel>(ApiUrl.HistoricalChart(CoinId, 1));
+        if (data1 != null)
         {
-            return Convert.ToDateTime(value).ToString("MMM");
+            Data = data1;
+            Data.is_success = true;
+
+            Random random = new Random();
+            int index = random.Next(0, 4);
+
+            IDataset<int> dataset1 = new LineDataset<int>(Data.prices.Select(x => Convert.ToInt32(x[1])).ToArray())
+                {
+                    Label = Name,
+                    BackgroundColor = randomColor[index],
+                    BorderColor = randomColor[index],
+                    Fill = FillingMode.Disabled
+                };
+
+            Data.prices.ForEach(x =>
+            {
+                _config.Data.Labels.Add(new DateTime(Convert.ToInt64(x[0])).ToString("hh:mm tt"));
+            });
+            _config.Data.Datasets.Add(dataset1);
         }
-
-        return string.Empty;
-    }
-
-    class DataItem
-    {
-        public string Date { get; set; }
-        public double Revenue { get; set; }
     }
 }

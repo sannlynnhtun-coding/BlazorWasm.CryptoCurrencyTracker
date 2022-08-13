@@ -2,16 +2,17 @@
 {
     public class SingleCoinModel
     {
+        public bool is_success { get; set; }
         public string id { get; set; }
         public string symbol { get; set; }
         public string name { get; set; }
-        public object asset_platform_id { get; set; }
+        //public object asset_platform_id { get; set; }
         //public Platforms platforms { get; set; }
         public int block_time_in_minutes { get; set; }
         public string hashing_algorithm { get; set; }
         public List<string> categories { get; set; }
-        public object public_notice { get; set; }
-        public List<object> additional_notices { get; set; }
+        //public object public_notice { get; set; }
+        //public List<object> additional_notices { get; set; }
         //public Localization localization { get; set; }
         public SingleCoinDescriptionModel description { get; set; }
         //public Links links { get; set; }
@@ -31,7 +32,7 @@
         //public CommunityData community_data { get; set; }
         //public DeveloperData developer_data { get; set; }
         //public PublicInterestStats public_interest_stats { get; set; }
-        public List<object> status_updates { get; set; }
+        //public List<object> status_updates { get; set; }
         public DateTime last_updated { get; set; }
         //public List<Ticker> tickers { get; set; }
     }
