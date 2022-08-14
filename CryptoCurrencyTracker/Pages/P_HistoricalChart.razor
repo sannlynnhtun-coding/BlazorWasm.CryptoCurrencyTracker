@@ -1,7 +1,10 @@
 ﻿@using ChartJs.Blazor.LineChart
 @inject IApiService _apiService
-
-<Chart Config="_config" @ref="_chart"></Chart>
+<MudCard>
+    <MudCardContent>
+        <Chart Config="_config" @ref="_chart" />
+    </MudCardContent>
+</MudCard>
 
 @code {
     [Parameter]
@@ -71,7 +74,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        var data1 = await _apiService.GetHistoricalChartAsync(CoinId, 1);
+        var data1 = await _apiService.GetHistoricalChartAsync(CoinId, 7);
         if (data1 != null)
         {
             Data = data1;
@@ -88,10 +91,23 @@
                     Fill = FillingMode.Disabled
                 };
 
-            Data.prices.ForEach(x =>
+            string[] items = new string[Data.prices.Count];
+            string[] items2 = new string[Data.prices.Count];
+            for (int i = 0; i < items.Length; i++)
             {
-                _config.Data.Labels.Add(new DateTime(Convert.ToInt64(x[0])).ToString("hh:mm tt"));
+                items[i] = new DateTime(Convert.ToInt64(Data.prices[i][0])).ToString("hh:mm tt");
+                items2[i] = new DateTime(Convert.ToInt64(Data.prices[i][0])).ToString("yy-MM-dd hh:mm tt");
+            }
+            Console.WriteLine(items2.ToJson());
+            //items = items.Distinct().ToArray();
+            items.ToList().ForEach(x =>
+            {
+                _config.Data.Labels.Add(x);
             });
+            //Data.prices.ForEach(x =>
+            //{
+            //    _config.Data.Labels.Add(new DateTime(Convert.ToInt64(x[0])).ToString("hh:mm tt"));
+            //});
             _config.Data.Datasets.Add(dataset1);
         }
     }

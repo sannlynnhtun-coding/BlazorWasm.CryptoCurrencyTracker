@@ -3,7 +3,7 @@
 @if (Data != null && Data.is_success)
 {
     <MudGrid>
-        <MudItem xs="4">
+        <MudItem xs="12" md="4">
             <MudCard>
                 <MudCardHeader>
                     <CardHeaderAvatar>
@@ -16,13 +16,13 @@
                 </MudCardHeader>
                 <MudCardContent>
                     <MudText Style="white-space: pre-line;" Typo="Typo.subtitle2">@((MarkupString)Data?.description?.en)</MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem xs="8">
-                <P_HistoricalChart CoinId="@Data.id" Name="@Data.name" />
-            </MudItem>
-        </MudGrid>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" md="8">
+            <P_HistoricalChart CoinId="@Data.id" Name="@Data.name" />
+        </MudItem>
+    </MudGrid>
 }
 
 @code {
