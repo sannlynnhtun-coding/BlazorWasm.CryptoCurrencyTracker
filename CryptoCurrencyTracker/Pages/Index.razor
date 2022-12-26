@@ -24,7 +24,7 @@
     List<TrendingCoinsModel> TrendingCoins = new List<TrendingCoinsModel>();
     List<CoinListModel> CoinList = new List<CoinListModel>();
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
@@ -35,6 +35,7 @@
                 await Task.WhenAll(data1, data2);
                 TrendingCoins = data1.Result.ToList();
                 CoinList = data2.Result.ToList();
+                StateHasChanged();
             }
             catch (Exception ex)
             {
