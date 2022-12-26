@@ -2,7 +2,7 @@
 @inject HttpClient Http
 
 @*<P_SlideCoins />*@
-<MudContainer MaxWidth="MaxWidth.ExtraLarge">
+@*<MudContainer MaxWidth="MaxWidth.ExtraLarge">
     <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" Centered="false" Class="my-6" Color="Color.Dark">
         <MudTabPanel Icon="@Icons.Material.Filled.TableRows" Text="Table" BadgeDot="true" BadgeColor="Color.Success">
             @if (CoinList != null && CoinList.Count() > 0)
@@ -17,15 +17,15 @@
             }
         </MudTabPanel>
     </MudTabs>
-</MudContainer>
-@*@if (CoinList != null && CoinList.Count() > 0)
+</MudContainer>*@
+@if (CoinList != null && CoinList.Count() > 0)
 {
     <P_CoinList Data="CoinList" />
 }
 @if (TrendingCoins != null && TrendingCoins.Count() > 0)
 {
     <P_TrendingCoins Data="TrendingCoins" />
-}*@
+}
 
 
 @code {
