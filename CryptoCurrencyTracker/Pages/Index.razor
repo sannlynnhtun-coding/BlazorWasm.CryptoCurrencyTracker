@@ -21,22 +21,25 @@
 
 
 @code {
-    IEnumerable<TrendingCoinsModel> TrendingCoins = new List<TrendingCoinsModel>();
-    IEnumerable<CoinListModel> CoinList = new List<CoinListModel>();
+    List<TrendingCoinsModel> TrendingCoins = new List<TrendingCoinsModel>();
+    List<CoinListModel> CoinList = new List<CoinListModel>();
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnAfterRenderAsync(bool firstRender)
     {
-        try
+        if (firstRender)
         {
-            var data1 = Http.GetFromJsonAsync<TrendingCoinsModel[]>(ApiUrl.TrendingCoinsV2("USD"));
-            var data2 = Http.GetFromJsonAsync<CoinListModel[]>(ApiUrl.CoinList("USD"));
-            await Task.WhenAll(data1, data2);
-            TrendingCoins = data1.Result;
-            CoinList = data2.Result;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message + ex.StackTrace);
+            try
+            {
+                var data1 = Http.GetFromJsonAsync<TrendingCoinsModel[]>(ApiUrl.TrendingCoinsV2("USD"));
+                var data2 = Http.GetFromJsonAsync<CoinListModel[]>(ApiUrl.CoinList("USD"));
+                await Task.WhenAll(data1, data2);
+                TrendingCoins = data1.Result.ToList();
+                CoinList = data2.Result.ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + ex.StackTrace);
+            }
         }
     }
 }
