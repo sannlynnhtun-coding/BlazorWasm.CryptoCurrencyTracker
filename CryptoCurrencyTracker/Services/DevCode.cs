@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace CryptoCurrencyTracker.Services
 {
@@ -6,7 +7,7 @@ namespace CryptoCurrencyTracker.Services
     {
         public static string ToJson(this object obj)
         {
-            return JsonSerializer.Serialize(obj);
+            return JsonConvert.SerializeObject(obj, Formatting.Indented);
         }
     }
 }
