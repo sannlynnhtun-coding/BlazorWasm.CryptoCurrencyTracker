@@ -20,13 +20,13 @@
         </MudTabPanel>
     </MudTabs>
 </MudContainer>*@
-@if (CoinList != null && CoinList.Count() > 0)
-{
-    <P_CoinList Data="CoinList" />
-}
 @if (TrendingCoins != null && TrendingCoins.Count() > 0)
 {
     <P_TrendingCoins Data="TrendingCoins" />
+}
+@if (CoinList != null && CoinList.Count() > 0)
+{
+    <P_CoinList Data="CoinList" />
 }
 
 
